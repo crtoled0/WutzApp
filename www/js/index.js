@@ -30,6 +30,7 @@ var app = {
           document.addEventListener("deviceready", this.onDeviceReady, false);
         } else {
           this.onDeviceReady(); //this is the browser
+          //console.log(device);
         }
       //  document.addEventListener('deviceready', this.onDeviceReady, false);
     },
@@ -38,17 +39,20 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+      // Once APP is LOAD use this
+      //  app.receivedEvent('deviceready');
+      locale.loadWutzTranslator("es", function(){
+        burstflyInit();
+        // Activates knockout.js
+        koMods["main"] = new MainModel();
+        ko.applyBindings(koMods["main"]);
+        koMods["main"].init();
+      });
+    //   locale.loadWutzTranslator();
+
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     }
 };

@@ -106,5 +106,8 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <access origin="*.googleapis.com" />
+        <access origin="*.gstatic.com" />
+        <access origin="http://maps.google.com" />
     </platform>
 </widget>
