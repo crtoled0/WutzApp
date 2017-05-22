@@ -49,6 +49,13 @@ function SearchResultModel() {
               if(finishedCounter >= 3){
                 clearInterval(inter);
                 koMods["main"].closeLoading();
+                if((mainMod.seArtists().length + mainMod.seAlbums().length + mainMod.seSongs().length) === 0){
+                  var msg = {type:"danger",
+                            title: locale.trans("se_notFound_title"),
+                            msg:   locale.trans("se_notFound_msg",{"criteria":text})};
+                   koMods["main"].displayGetMessage(msg);
+                   koMods["main"].back2MainModel();
+                }
               }
           },100);
     };

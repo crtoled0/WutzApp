@@ -1,2 +1,6 @@
 exportDist.js
 package.json
+node_modules
+platforms
+plugins
+hooks

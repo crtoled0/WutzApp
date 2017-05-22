@@ -15,10 +15,10 @@ function Connect2BarModel() {
 
     var initDevUsrSetup = function(mod){
       var kuki = window.localStorage;
-      if(device.uuid && device.uuid !== ""){
+      if(device){
           guid = device.uuid;
       }
-      else if(kuki.getItem("guid") && kuki.getItem("guid") !== ""){
+      if(kuki.getItem("guid") && kuki.getItem("guid") !== ""){
           guid = kuki.getItem("guid");
       }
       else{

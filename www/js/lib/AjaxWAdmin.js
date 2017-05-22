@@ -39,7 +39,7 @@
 								}
                 var mySelf = this;
                 var params = serv.params?JSON.stringify(serv.params):"";
-                $.ajax({
+							  $.ajax({
                         type: method,
                         dataType: 'json',
                         url: mySelf._config.wutzAdminHost+"/"+service,

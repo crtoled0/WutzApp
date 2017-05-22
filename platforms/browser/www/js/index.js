@@ -26,11 +26,30 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
+      //document.addEventListener("deviceready", onDeviceReady, false);
+      var mainApp = this;
       if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
-          document.addEventListener("deviceready", this.onDeviceReady, false);
-        } else {
-          this.onDeviceReady(); //this is the browser
-          //console.log(device);
+          document.addEventListener("deviceready", function(){
+              console.log("Device is ready or not ?");
+              mainApp.onDeviceReady();
+          }, false);
+        }
+        else{
+          var tries = 0;
+          var inter = setInterval(function(){
+            if(tries < 20){
+              tries++;
+              if(device !== undefined){
+                 clearInterval(inter);
+                 mainApp.onDeviceReady();
+              }
+              console.log(tries);
+            }
+            else{
+              clearInterval(inter);
+              mainApp.onDeviceReady();
+            }
+          },100);
         }
       //  document.addEventListener('deviceready', this.onDeviceReady, false);
     },
@@ -42,6 +61,7 @@ var app = {
       // Once APP is LOAD use this
       //  app.receivedEvent('deviceready');
       locale.loadWutzTranslator("es", function(){
+        //console.log(device.cordova);
         burstflyInit();
         // Activates knockout.js
         koMods["main"] = new MainModel();
