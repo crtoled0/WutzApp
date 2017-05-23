@@ -26,7 +26,11 @@
     var WutzGMapsAPIImpl = {
         _version : 0.1,
         _config : {
-           gmKey : null
+           gmKey : null,
+					 keys : {browserGAPIKey:"AIzaSyCUmViI6PWuNRffHoByiWqcSQ7Xt7MSQMg",
+					 				 androidKey:"AIzaSyAi0mwFlF5jniTaorbXjB2xklLr2SowVbA",
+									 iosGAPIKey:"AIzaSyAbW4YdgW4WJgYvqqSvUuVD1hzKDzyhgZU"
+								   }
         }
     };
 	/**
@@ -36,19 +40,20 @@
 //Public
     WutzGMapsAPIImpl.load = function(wutzConfig,callback){
             var gmapsUrl="";
-            if( /Android/i.test(navigator.userAgent) ) {
-               gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+wutzConfig.androidGAPIKey;
-               this._config.gmKey = wutzConfig.androidGAPIKey;
+						wutzConfig = JSON.parse(JSON.stringify(wutzConfig));
+						if(/Android/i.test(navigator.userAgent) ) {
+					     gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+this._config.keys.androidKey;
+               this._config.gmKey = this._config.keys.androidKey;
             }
             else if(/webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)){
-                gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+wutzConfig.iosGAPIKey;
-                this._config.gmKey = wutzConfig.iosGAPIKey;
+							  gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+this._config.keys.iosGAPIKey;
+                this._config.gmKey = this._config.keys.iosGAPIKey;
             }
             else{
-               gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+wutzConfig.browserGAPIKey;
-               this._config.gmKey = wutzConfig.browserGAPIKey;
+							 gmapsUrl = "https://maps.google.com/maps/api/js?v=3.exp&libraries=geometry,places&ext=.js&key="+this._config.keys.browserGAPIKey;
+               this._config.gmKey = this._config.keys.browserGAPIKey;
             }
-          var geoLocObj =  "<script id=\"geoLocLib\" type=\"text/javascript\" src=\""+gmapsUrl+"\"></script>";
+				  var geoLocObj =  "<script id=\"geoLocLib\" type=\"text/javascript\" src=\""+gmapsUrl+"\"></script>";
           $("body").append(geoLocObj);
           var labelmarker = "<script id=\"markWLab\" src=\"https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js\"></script>";
           var waiting4GM = window.setInterval(function(){

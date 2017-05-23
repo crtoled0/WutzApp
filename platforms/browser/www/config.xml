@@ -14,10 +14,11 @@
       Cristian Toledo
   </author>
     <content src="index.html" />
+    <icon src="www/icon.png" />
+    <access origin="*" />
     <access origin="*.googleapis.com" />
     <access origin="*.gstatic.com" />
-    <access origin="http://maps.google.com" />
-    <access origin="*" />
+    <access origin="https://maps.google.com" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
