@@ -167,6 +167,9 @@ function Connect2BarModel() {
         var dayToken = $("#inputTokenBar input").val();
         var par = {catId:loadedBar.idcatalog,
                    token:dayToken};
+          if(dayToken === "")
+              return false;
+
           koMods["main"].openLoading();
           window.wutzAdmin.callService({service:"checkToken",method:"POST",params:par},function(_res){
               koMods["main"].closeLoading();

@@ -10,31 +10,24 @@ function SearchResultModel() {
 
     mainMod.applySearch = function(text){
           console.log("Searching ... " + text);
-          koMods["main"].openLoading();
           var text = (text.toLowerCase()).replace(/\s/ig,"");
           var catalog = wtzCache.getBarCachedCatalog();
           mainMod.seArtists([]);
           mainMod.seAlbums([]);
           mainMod.seSongs([]);
           var finishedCounter = 0;
-          setTimeout(function(){
-            searchSongs(text,catalog.songs,function(_node){
-                console.log(_node);
-                if(!_node.finished)
-                    mainMod.seSongs.push(_node);
-                else
-                   finishedCounter++;
-            });
-          },0);
-          setTimeout(function(){
-            searchAlbums(text,catalog.albums,function(_node){
-                console.log(_node);
-                if(!_node.finished)
-                    mainMod.seAlbums.push(_node);
-                else
-                    finishedCounter++;
-            });
-          },0);
+
+          searchAlbAndSongsOnCatalog(text, function(_seRes){
+              mainMod.seSongs([]);
+              mainMod.seAlbums([]);
+              if(_seRes){
+                  if(_seRes.albums)
+                      mainMod.seAlbums(_seRes.albums);
+                  if(_seRes.songs)
+                      mainMod.seSongs(_seRes.songs);
+              }
+              finishedCounter++;
+          });
           setTimeout(function(){
             searchArtists(text,catalog.artists,function(_node){
                 console.log(_node);
@@ -46,9 +39,8 @@ function SearchResultModel() {
           },0);
 
           var inter = setInterval(function(){
-              if(finishedCounter >= 3){
+              if(finishedCounter >= 2){
                 clearInterval(inter);
-                koMods["main"].closeLoading();
                 if((mainMod.seArtists().length + mainMod.seAlbums().length + mainMod.seSongs().length) === 0){
                   var msg = {type:"danger",
                             title: locale.trans("se_notFound_title"),
@@ -61,8 +53,9 @@ function SearchResultModel() {
     };
 
     mainMod.goArtAlbList = function(art){
-       koMods["main"].back2MainModel();
-       koMods["main"].fillAlbums(art);
+      // koMods["main"].back2MainModel();
+      // koMods["main"].fillAlbums(art);
+      koMods["main"].openSongListModel(art, true);
     };
 
     mainMod.displaySongs4Album = function(alb){
@@ -70,7 +63,13 @@ function SearchResultModel() {
     };
 
     mainMod.addSongToQueue = function(sng){
+      if(koMods["songList"])
         koMods["songList"].addItem(sng);
+      else{
+          koMods["main"].loadSongListModel(function(){
+               koMods["songList"].addItem(sng);
+          });
+      }
     };
 
 //Private functions
@@ -105,6 +104,15 @@ function SearchResultModel() {
           }
        }
      callback({finished:true});
+   };
+
+   var searchAlbAndSongsOnCatalog = function(text, callback){
+     koMods["main"].openLoading();
+     var catid = koMods["main"].barLoaded().idcatalog;
+     window.wutzAdmin.callService({service:"searchOnCatalog/"+catid+"/"+text},function(_res){
+           koMods["main"].closeLoading();
+           callback(_res);
+     });
    };
 
 }

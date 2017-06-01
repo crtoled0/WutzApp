@@ -311,6 +311,19 @@ function burstflyInit(){
    burstflyInit_2();
    preloader();
    $(".sliderTxt").textSlider();
+   $('body').append('<div id="toTop" class="btn btn-danger"><i class="fa fa-arrow-up"></i></div>');
+   $(window).scroll(function () {
+  		if ($(this).scrollTop() != 0) {
+    				$('#toTop').fadeIn();
+  		} else {
+    				$('#toTop').fadeOut();
+      }
+    });
+    $('#toTop').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+    });
+
   // $("#stripes").show();
    //addLoadEvent();
 };

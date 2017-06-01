@@ -83,6 +83,7 @@ function MainModel() {
                   mainMod.artists.push(_res[i]);
                 }
                 wtzCache.addArtists(mainMod.artists());
+                /**
                 mainMod.isSearchIndexing(true);
                 setTimeout(function(){
                     wtzCache.startIndexingCatalog();
@@ -90,6 +91,7 @@ function MainModel() {
                 wtzCache.onCatalogIndexed(function(){
                     mainMod.isSearchIndexing(false);
                 });
+                **/
           });
       }
       else
@@ -105,11 +107,13 @@ function MainModel() {
               mainMod.closeLoading();
           });
         }
+        /**
         $('#filterInput').on('keyup', function(){
           setTimeout(function(){
             mainMod.localSearch($('#filterInput').val());
           },0);
         });
+        **/
      };
 
     //Functions To Start Externam Models
@@ -140,12 +144,17 @@ function MainModel() {
         $("#cross-menu").click();
     };
 
-    mainMod.openSongListModel = function(alb){
+    mainMod.openSongListModel = function(itm, artistLst){
     //  $("#stripes").click();
+     var alb = !artistLst?itm:null;
+     var art = artistLst?itm:null;
+
       mainMod.openLoading();
-      var sel = mainMod.currSelected();
-      sel.album = alb;
-      mainMod.currSelected(sel);
+      if(alb){
+        var sel = mainMod.currSelected();
+        sel.album = alb;
+        mainMod.currSelected(sel);
+      }
       if(!koMods["songList"]){
         $.get('templates/songList.html', function(htmlTlp) {
             var midtUpObj = $("<div>"+htmlTlp+"</div>");
@@ -154,15 +163,36 @@ function MainModel() {
             ko.applyBindings(koMods["songList"], document.getElementById("songListContainer"));
           //  locale.transHtmlSection($("#songListContainer"));
             koMods["songList"].init();
-            koMods["songList"].loadSongList();
+            if(alb)
+                koMods["songList"].loadSongList();
+            else
+                koMods["songList"].loadSongList4Artist(art.idartist);
             $('#songListContainer').modal({backdrop: 'static', keyboard: false});
             mainMod.closeLoading();
         });
       }
       else{
-        koMods["songList"].loadSongList();
+        if(alb)
+            koMods["songList"].loadSongList();
+        else
+            koMods["songList"].loadSongList4Artist(art.idartist);
          $('#songListContainer').modal({backdrop: 'static', keyboard: false});
          mainMod.closeLoading();
+      }
+    };
+
+    mainMod.loadSongListModel = function(callback){
+      mainMod.openLoading();
+      if(!koMods["songList"]){
+        $.get('templates/songList.html', function(htmlTlp) {
+            var midtUpObj = $("<div>"+htmlTlp+"</div>");
+            $("body").append(midtUpObj);
+            koMods["songList"] = new SongListModel();
+            ko.applyBindings(koMods["songList"], document.getElementById("songListContainer"));
+            koMods["songList"].init();
+            mainMod.closeLoading();
+            callback();
+        });
       }
     };
 
@@ -201,13 +231,16 @@ function MainModel() {
     //  mainMod.closeAlbums();
       mainMod.displayMainMod(true);
     //  mainMod.fillArtists();
+    /**
       $('#filterInput').on('keyup', function(){
         setTimeout(function(){
           mainMod.localSearch($('#filterInput').val());
         },0);
       });
       mainMod.localSearch($('#filterInput').val());
+      **/
     };
+
 
     mainMod.logOutBar = function(){
        $("#cross-menu").click();

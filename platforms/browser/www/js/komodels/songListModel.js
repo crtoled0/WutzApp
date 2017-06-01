@@ -27,6 +27,23 @@ function SongListModel() {
          mainMod.songs(cacheSongs);
     };
 
+    mainMod.loadSongList4Artist = function(artId){
+      var catId =  koMods["main"].barLoaded().idcatalog;
+      mainMod.songs([]);
+
+    //  var cacheSongs = wtzCache.getSongs(albSel.idalbum);
+  //    if(!cacheSongs){
+          koMods["main"].openLoading();
+          window.wutzAdmin.callService({service:"getArtistSongs/"+catId+"/"+artId},function(_res){
+                mainMod.songs(_res);
+              //  wtzCache.addSongs(albSel.idalbum, _res);
+                koMods["main"].closeLoading();
+          });
+    //  }
+      //else
+        // mainMod.songs(cacheSongs);
+    };
+
     mainMod.addItem = function(song){
       var loadedBar = koMods["main"].barLoaded();
       console.log(song);
