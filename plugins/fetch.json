@@ -106,7 +106,7 @@
     "cordova-plugin-globalization": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-globalization@~1.0.3"
+            "id": "cordova-plugin-globalization"
         },
         "is_top_level": true,
         "variables": {}

@@ -60,16 +60,25 @@ var app = {
     onDeviceReady: function() {
       // Once APP is LOAD use this
       //  app.receivedEvent('deviceready');
-      locale.loadWutzTranslator("es", function(){
-        //console.log(device.cordova);
+      var mainMod = this;
+      navigator.globalization.getPreferredLanguage(
+        function (language) {
+          console.log("Setted Language "+language.value.split("-")[0]);
+          mainMod.setTransLang(language.value.split("-")[0]);
+        },
+        function () {
+          console.log("Error Loading language, loading EN by default");
+          mainMod.setTransLang("en");
+        });
+    },
+    setTransLang: function(lng){
+      locale.loadWutzTranslator(lng, function(){
         burstflyInit();
         // Activates knockout.js
         koMods["main"] = new MainModel();
         ko.applyBindings(koMods["main"]);
         koMods["main"].init();
       });
-    //   locale.loadWutzTranslator();
-
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
